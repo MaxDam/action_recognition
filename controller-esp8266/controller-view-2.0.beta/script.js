@@ -83,20 +83,13 @@ window.addEventListener('resize', onWindowResize, false);
 init3D();
 
 function startConnect() {
-	//var host = "6f2bddbb318d4bc3b9496192a5073062.s1.eu.hivemq.cloud";
-	//var port = 8884;
-	//var host = "test.mosquitto.org";
-	//var host = "5.196.95.208";
-	var host = "91.121.93.94";
-	var port = 8080;
-	//var host = "192.168.1.9";
-	//var port = 9001;
+	var host = "localhost";
+	var port = 1883;
 	
 	clientID = parseInt(Math.random() * 1000) + "-clientID";
 
 	// Create a client instance
 	client = new Paho.MQTT.Client(host, Number(port), clientID);
-	//client.tls_insecure_set(true);
 	
 	// set callback handlers
 	client.onConnectionLost = onConnectionLost;
@@ -105,8 +98,8 @@ function startConnect() {
 	// connect the client
 	client.connect({
 		onSuccess: onConnect,
-		/*userName:  "hivemax",
-		password:  "HivePwd1"*/
+		/*userName:  "xxx",
+		password:    "xxx"*/
 	});
 }
 

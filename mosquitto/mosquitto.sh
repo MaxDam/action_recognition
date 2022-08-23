@@ -1,1 +1,1 @@
-mosquitto -c "C:\Users\Utente\Desktop\mqtt\mosquitto2.conf" -v
+mosquitto -c "C:\Users\Utente\Desktop\mqtt\mosquitto.conf" -v

@@ -14,7 +14,8 @@
 
 #define LED 2
 
-#define BUTTON_PIN 0 // use pin 0 on ESP8266 (D3)
+#define BUTTON_PIN 16 // use pin D0 on ESP8266 (the only one with pulldown resistor)
+int buttonState = HIGH;
 
 const char* ssid = "Vodafone-C01960075";
 const char* password = "tgYsZkgHA4xhJLGy";
@@ -445,16 +446,25 @@ void reconnect() {
 }
 
 void setup() {
-  pinMode(LED, OUTPUT);
   Serial.begin(115200);
+  
+  pinMode(LED, OUTPUT);
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
+  
   deviceId = String(random(3000));
   //deviceId = String(WiFi.macAddress());
+  
   initWiFi();
   initMPU6050();
   initMQTT();
 }
 
 void loop() {
+
+  //get button state
+  buttonState = digitalRead(BUTTON_PIN);
+  //...
+	
   //check MQTT connection
   if (!mqttClient.connected()) {
     reconnect();

@@ -14,6 +14,8 @@
 
 #define LED 2
 
+#define BUTTON_PIN 0 // use pin 0 on ESP8266 (D3)
+
 const char* ssid = "Vodafone-C01960075";
 const char* password = "tgYsZkgHA4xhJLGy";
 //const char* mqtt_server = "6f2bddbb318d4bc3b9496192a5073062.s1.eu.hivemq.cloud";
@@ -116,7 +118,7 @@ float euler[3];         // [psi, theta, phi]    Euler angle container
 float ypr[3];           // [yaw, pitch, roll]   yaw/pitch/roll container and gravity vector
 #endif
 
-#define INTERRUPT_PIN 15 // use pin 15 on ESP8266
+#define INTERRUPT_PIN 15 // use pin 15 on ESP8266 (D8)
 
 const char DEVICE_NAME[] = "mpu6050";
 

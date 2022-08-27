@@ -2,6 +2,8 @@
 //https://www.geekmomprojects.com/mpu-6050-redux-dmp-data-fusion-vs-complementary-filter/
 //http://www.geekmomprojects.com/mpu-6050-dmp-data-from-i2cdevlib/
 
+//TOOLS->Board->ESP8266 Boards (3.0.2)->LOLIN (WeMos) D1 mini Lite
+
 #include <ESP8266WiFi.h>
 #include "I2Cdev.h"
 #include "MPU6050_6Axis_MotionApps20.h"
@@ -19,18 +21,13 @@ int buttonState = HIGH;
 
 const char* ssid = "Vodafone-C01960075";
 const char* password = "tgYsZkgHA4xhJLGy";
-//const char* mqtt_server = "6f2bddbb318d4bc3b9496192a5073062.s1.eu.hivemq.cloud";
-//const int   mqtt_port = 8883;
-char* mqtt_server = "test.mosquitto.org";
-//char* mqtt_server = "5.196.95.208";
-//char* mqtt_server = "192.168.1.9";
+char* mqtt_server = "192.168.1.8";
 const int   mqtt_port = 1883;
 const char* output_topic = "esp8266/test-max";
-const char *mqtt_username = "hivemax";
-const char *mqtt_password = "HivePwd1";
+const char *mqtt_username = "test";
+const char *mqtt_password = "test";
 
 WiFiClient espClient;
-//WiFiClientSecure espClient;
 PubSubClient mqttClient(espClient);
 #define MSG_BUFFER_SIZE  (128) //il server MQTT accetta messaggio fino a 128 caratteri, altrimenti li scarta senza dire nulla
 char msg[MSG_BUFFER_SIZE];

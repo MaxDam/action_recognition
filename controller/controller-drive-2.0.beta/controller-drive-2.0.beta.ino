@@ -16,7 +16,7 @@
 
 #define LED 2
 
-#define BUTTON_PIN 16 // use pin D0 on ESP8266 (the only one with pulldown resistor)
+#define BUTTON_PIN 2 // use pin D4 on ESP8266 (with pulldown 10k resistor)
 int buttonState = HIGH;
 
 const char* ssid = "Vodafone-C01960075";
@@ -460,7 +460,8 @@ void loop() {
 
   //get button state
   buttonState = digitalRead(BUTTON_PIN);
-  //...
+  //Serial.print("Button state: ");
+  //Serial.println((buttonState==LOW?"LOW":"HIGH"));
 	
   //check MQTT connection
   if (!mqttClient.connected()) {

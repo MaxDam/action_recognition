@@ -27,17 +27,16 @@
 
 #define LED 2
 
+#define BUTTON_PIN 2 // use pin D4 on ESP8266 (with pulldown 10k resistor)
+int buttonState = HIGH;
+
 const char* ssid = "Vodafone-C01960075";
 const char* password = "tgYsZkgHA4xhJLGy";
-//const char* mqtt_server = "6f2bddbb318d4bc3b9496192a5073062.s1.eu.hivemq.cloud";
-//const int   mqtt_port = 8883;
-char* mqtt_server = "test.mosquitto.org";
-//char* mqtt_server = "5.196.95.208";
-//char* mqtt_server = "192.168.1.9";
+char* mqtt_server = "192.168.1.8";
 const int   mqtt_port = 1883;
 const char* output_topic = "esp8266/test-max";
-const char *mqtt_username = "hivemax";
-const char *mqtt_password = "HivePwd1";
+const char *mqtt_username = "test";
+const char *mqtt_password = "test";
 
 WiFiClient espClient;
 //WiFiClientSecure espClient;
@@ -57,8 +56,6 @@ int pitch  = 0;
 int roll   = 0;
 int yaw    = 0;
   
-static const char *fingerprint PROGMEM = "44 14 9A 3F C3 E9 F1 F3 84 1A B4 9F B6 4D 19 8A B2 92 31 D6";                                                                                           
-     
 MAG3110 mag = MAG3110();
 int mX, mY, mZ;
 
@@ -126,9 +123,6 @@ void initMQTT() {
   
   Serial.println("init MQTT ....");
 
-  //espClient.setFingerprint(fingerprint);
-  //espClient.setInsecure();
-
   // Create a random client ID
   //i server mqtt ha un timeout di connessione legato allo stesso id, quindi meglio generarlo random
   clientId = String(random(3000))+String(random(3000))+String(random(3000))+String(random(3000))+String(random(3000))+String(random(3000));
@@ -189,13 +183,20 @@ void reconnect() {
 }
 
 void setup() {
-  pinMode(LED, OUTPUT);
   Serial.begin(115200);
+  
+  pinMode(LED, OUTPUT);
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
+  
   deviceId = String(random(3000));
   //deviceId = String(WiFi.macAddress());
+  
   initWiFi();
+  
   initMPU6050();
+  
   initMAG3110();
+  
   initMQTT();
 }
 
@@ -211,6 +212,11 @@ void loop() {
   digitalWrite(LED, ledState);
   ledState = !ledState;
 
+   //get button state
+  buttonState = digitalRead(BUTTON_PIN);
+  //Serial.print("Button state: ");
+  //Serial.println((buttonState==LOW?"LOW":"HIGH"));
+  
   //ottiene i dati dal sensore
   mpu.update();
   
@@ -227,7 +233,7 @@ void loop() {
   //inizializza e riempie il json di risposta
   DynamicJsonDocument readings(1024);
   
-  //readings["id"] = deviceId;
+  readings["id"] = deviceId;
 
   readings["gX"] = pitch;
   readings["gY"] = roll;
@@ -242,7 +248,9 @@ void loop() {
   readings["aZ"] = mpu.getAccZ();
   
   readings["tp"] = mpu.getTemp();
-
+ 
+  readings["bt"] = (buttonState==LOW?1:0);
+  
   //prepara il messaggio
   String telemetry = "";
   serializeJson(readings, telemetry);

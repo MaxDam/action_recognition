@@ -150,8 +150,8 @@ function onMessageArrived(message) {
 		yaw   = THREE.Math.degToRad(obj.gZ);
 		
 		//orientation cube
-		cube.rotation.x = pitch+pitchOffset;
-		cube.rotation.y = yaw+yawOffset; 
+		cube.rotation.x = yaw+yawOffset; 
+		cube.rotation.y = pitch+pitchOffset;
 		cube.rotation.z = roll+rollOffset;
 		
 		//acceleration arrow

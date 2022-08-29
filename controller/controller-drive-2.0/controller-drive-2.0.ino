@@ -452,7 +452,9 @@ void setup() {
   //deviceId = String(WiFi.macAddress());
   
   initWiFi();
+  
   initMPU6050();
+  
   initMQTT();
 }
 
@@ -478,9 +480,9 @@ void loop() {
   pitch  = x;
   roll   = y;
   yaw    = z;
-  pitch  =  map(pitch,-90, +90, MIN_DEG, MAX_DEG);
-  roll   = -map(roll, -90, +90, MIN_DEG, MAX_DEG);
-  yaw    =  map(yaw,  -90, +90, MIN_DEG, MAX_DEG);
+  pitch  =  -map(pitch,-90, +90, MIN_DEG, MAX_DEG);
+  roll   =   map(roll, -90, +90, MIN_DEG, MAX_DEG);
+  yaw    =   map(yaw,  -90, +90, MIN_DEG, MAX_DEG);
   
   //init json response
   DynamicJsonDocument readings(1024);
@@ -511,5 +513,5 @@ void loop() {
   mqttClient.publish(output_topic, msg);
   
   //attende
-  delay(100);
+  //delay(100);
 }

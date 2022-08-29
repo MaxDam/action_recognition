@@ -14,6 +14,8 @@
 //#include <WiFiUdp.h>
 //#include <OSCMessage.h>
 
+//####################################
+
 #define LED 2
 
 #define BUTTON_PIN 2 // use pin D4 on ESP8266 (with pulldown 10k resistor)
@@ -35,14 +37,15 @@ bool ledState = 1;
 String deviceId;
 String clientId;
 
+//local variables to send message mqtt+json
 int MIN_DEG = -90;
 int MAX_DEG = +90;
 int w,x,y,z = 0;
 int pitch   = 0;
 int roll    = 0;
 int yaw     = 0;
-  
-static const char *fingerprint PROGMEM = "44 14 9A 3F C3 E9 F1 F3 84 1A B4 9F B6 4D 19 8A B2 92 31 D6"; 
+
+//####################################
 
 // class default I2C address is 0x68
 // specific I2C addresses may be passed as a parameter here
@@ -89,7 +92,7 @@ VectorFloat gravity;    // [x, y, z]            gravity vector
 // from the FIFO. Note this also requires gravity vector calculations.
 // Also note that yaw/pitch/roll angles suffer from gimbal lock (for
 // more info, see: http://en.wikipedia.org/wiki/Gimbal_lock)
-//#define OUTPUT_READABLE_YAWPITCHROLL
+#define OUTPUT_READABLE_YAWPITCHROLL
 
 // uncomment "OUTPUT_READABLE_REALACCEL" if you want to see acceleration
 // components with gravity removed. This acceleration reference frame is
@@ -380,9 +383,6 @@ void initMQTT() {
   
   Serial.println("init MQTT ....");
 
-  //espClient.setFingerprint(fingerprint);
-  //espClient.setInsecure();
-
   // Create a random client ID
   //i server mqtt ha un timeout di connessione legato allo stesso id, quindi meglio generarlo random
   clientId = String(random(3000))+String(random(3000))+String(random(3000))+String(random(3000))+String(random(3000))+String(random(3000));
@@ -458,11 +458,6 @@ void setup() {
 
 void loop() {
 
-  //get button state
-  buttonState = digitalRead(BUTTON_PIN);
-  //Serial.print("Button state: ");
-  //Serial.println((buttonState==LOW?"LOW":"HIGH"));
-	
   //check MQTT connection
   if (!mqttClient.connected()) {
     reconnect();
@@ -473,6 +468,11 @@ void loop() {
   digitalWrite(LED, ledState);
   ledState = !ledState;
 
+  //get button state
+  buttonState = digitalRead(BUTTON_PIN);
+  //Serial.print("Button state: ");
+  //Serial.println((buttonState==LOW?"LOW":"HIGH"));
+	
   //get sensor data
   mpu_loop();
   pitch  = x;
@@ -485,7 +485,7 @@ void loop() {
   //init json response
   DynamicJsonDocument readings(1024);
   
-  //readings["id"] = deviceId;
+  readings["id"] = deviceId;
 
   readings["gX"] = pitch;
   readings["gY"] = roll;
@@ -496,6 +496,8 @@ void loop() {
   readings["aZ"] = 0;
   
   readings["tp"] = 0;
+  
+  readings["bt"] = (buttonState==LOW?1:0);
 
   //prepara il messaggio
   String telemetry = "";
@@ -509,5 +511,5 @@ void loop() {
   mqttClient.publish(output_topic, msg);
   
   //attende
-  //delay(100);
+  delay(100);
 }

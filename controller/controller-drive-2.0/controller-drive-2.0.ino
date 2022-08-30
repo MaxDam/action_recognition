@@ -6,7 +6,8 @@
 
 #include <ESP8266WiFi.h>
 #include "I2Cdev.h"
-#include "MPU6050_6Axis_MotionApps20.h"
+//#include "MPU6050_6Axis_MotionApps20.h"
+#include "MPU6050_6Axis_MotionApps612.h"
 #include "Wire.h"
 #include <ArduinoJson.h>
 #include <PubSubClient.h>
@@ -87,6 +88,7 @@ VectorFloat gravity;    // [x, y, z]            gravity vector
 // http://en.wikipedia.org/wiki/Gimbal_lock)
 //#define OUTPUT_READABLE_EULER
 
+//#####################  YAW PITCH ROLL  ####################
 // uncomment "OUTPUT_READABLE_YAWPITCHROLL" if you want to see the yaw/
 // pitch/roll angles (in degrees) calculated from the quaternions coming
 // from the FIFO. Note this also requires gravity vector calculations.
@@ -94,12 +96,13 @@ VectorFloat gravity;    // [x, y, z]            gravity vector
 // more info, see: http://en.wikipedia.org/wiki/Gimbal_lock)
 #define OUTPUT_READABLE_YAWPITCHROLL
 
+//#####################  ACCELERATION  ######################
 // uncomment "OUTPUT_READABLE_REALACCEL" if you want to see acceleration
 // components with gravity removed. This acceleration reference frame is
 // not compensated for orientation, so +X is always +X according to the
 // sensor, just without the effects of gravity. If you want acceleration
 // compensated for orientation, us OUTPUT_READABLE_WORLDACCEL instead.
-//#define OUTPUT_READABLE_REALACCEL
+#define OUTPUT_READABLE_REALACCEL
 
 // uncomment "OUTPUT_READABLE_WORLDACCEL" if you want to see acceleration
 // components with gravity removed and adjusted for the world frame of
@@ -477,9 +480,9 @@ void loop() {
 	
   //get sensor data
   mpu_loop();
-  pitch  = x;
-  roll   = y;
-  yaw    = z;
+  pitch  =  ypr[0] * 180/M_PI;
+  roll   =  ypr[1] * 180/M_PI;
+  yaw    =  ypr[2] * 180/M_PI;
   pitch  =  -map(pitch,-90, +90, MIN_DEG, MAX_DEG);
   roll   =   map(roll, -90, +90, MIN_DEG, MAX_DEG);
   yaw    =   map(yaw,  -90, +90, MIN_DEG, MAX_DEG);
@@ -493,9 +496,9 @@ void loop() {
   readings["gY"] = roll;
   readings["gZ"] = yaw;
 
-  readings["aX"] = 0;
-  readings["aY"] = 0;
-  readings["aZ"] = 0;
+  readings["aX"] = aaReal.x;
+  readings["aY"] = aaReal.y;
+  readings["aZ"] = aaReal.z;
   
   readings["tp"] = 0;
   
@@ -513,5 +516,5 @@ void loop() {
   mqttClient.publish(output_topic, msg);
   
   //attende
-  //delay(100);
+  //delay(10);
 }

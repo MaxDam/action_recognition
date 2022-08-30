@@ -58,6 +58,7 @@ body {
   display: inline-block;
   font-size: 14px; width: 150px;
   border-radius: 4px;
+  margin-top: 10px;
 }
 #resetX, #resetY, #resetZ{
   border: none;

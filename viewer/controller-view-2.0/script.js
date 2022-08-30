@@ -17,6 +17,8 @@ let aXOffset = 0;
 let aYOffset = 0;
 let aZOffset = 0;
 
+let showAcceleration = false;
+
 function parentWidth(elem) {
   return elem.parentElement.clientWidth;
 }
@@ -132,7 +134,7 @@ function onMessageArrived(message) {
   
 		var obj = JSON.parse(message.payloadString);
 		
-		//document.getElementById("deviceId").innerHTML = obj.id;
+		document.getElementById("deviceId").innerHTML = obj.id;
 		
 		document.getElementById("gyroX").innerHTML = obj.gX;
 		document.getElementById("gyroY").innerHTML = obj.gY;
@@ -144,6 +146,12 @@ function onMessageArrived(message) {
 
 		document.getElementById("temp").innerHTML = obj.tp;
 		
+		document.getElementById("btn").innerHTML = "";
+		if(obj.bt == 1) {
+			resetPosition();
+			document.getElementById("btn").innerHTML = "Pressed";
+		}
+		
 		// Change cube rotation after receiving the readinds
 		pitch = THREE.Math.degToRad(obj.gX);
 		roll  = THREE.Math.degToRad(obj.gY);
@@ -154,20 +162,24 @@ function onMessageArrived(message) {
 		cube.rotation.y = pitch+pitchOffset;
 		cube.rotation.z = roll+rollOffset;
 		
-		//acceleration arrow
-		var accThreshold = 0.05;
-		if(Math.abs(aX-obj.aX) > accThreshold) aX = obj.aX;
-		if(Math.abs(aY-obj.aY) > accThreshold) aY = obj.aY;
-		if(Math.abs(aZ-obj.aZ) > accThreshold) aZ = obj.aZ;
-		var sourcePosition = new THREE.Vector3(0, 0, 0);
-		var targetPosition = new THREE.Vector3(aX+aXOffset, aZ+aZOffset, aY+aYOffset);
-		targetPosition.applyAxisAngle(new THREE.Vector3( 1, 0, 0 ), pitch+pitchOffset);
-		targetPosition.applyAxisAngle(new THREE.Vector3( 0, 1, 0 ), yaw+yawOffset);
-		targetPosition.applyAxisAngle(new THREE.Vector3( 0, 0, 1 ), roll+rollOffset);
-		var direction = sourcePosition.clone().sub(targetPosition);
-		arrow.setDirection(direction.normalize());
-		//arrow.setLength(direction.length()*4, 3, 1);
-		arrow.setLength(direction.length()*4, direction.length()*4*0.3,  direction.length()*4*0.3*0.3);
+		if(showAcceleration) {
+			//acceleration arrow
+			var accThreshold = 0.05;
+			if(Math.abs(aX-obj.aX) > accThreshold) aX = obj.aX;
+			if(Math.abs(aY-obj.aY) > accThreshold) aY = obj.aY;
+			if(Math.abs(aZ-obj.aZ) > accThreshold) aZ = obj.aZ;
+			var sourcePosition = new THREE.Vector3(0, 0, 0);
+			var targetPosition = new THREE.Vector3(aX+aXOffset, aZ+aZOffset, aY+aYOffset);
+			targetPosition.applyAxisAngle(new THREE.Vector3( 1, 0, 0 ), pitch+pitchOffset);
+			targetPosition.applyAxisAngle(new THREE.Vector3( 0, 1, 0 ), yaw+yawOffset);
+			targetPosition.applyAxisAngle(new THREE.Vector3( 0, 0, 1 ), roll+rollOffset);
+			var direction = sourcePosition.clone().sub(targetPosition);
+			arrow.setDirection(direction.normalize());
+			//arrow.setLength(direction.length()*4, 3, 1);
+			arrow.setLength(direction.length()*4, direction.length()*4*0.3,  direction.length()*4*0.3*0.3);
+		} else {
+			arrow.setLength(0,  0);
+		}
 		
 		renderer.render(scene, camera);
 	}
@@ -188,6 +200,11 @@ function resetAcceleration() {
 	aXOffset = -aX;
 	aYOffset = -aY;
 	aZOffset = -aZ;
+}
+
+//toggle acceleration
+function toggleAcceleration() {
+	showAcceleration = !showAcceleration;
 }
 
 startConnect();

@@ -8,7 +8,7 @@
 
 <!DOCTYPE HTML><html>
 <head>
-  <title>CONTROLLER VIEW</title>
+  <title>ACTION RECOGNITION CONTROLLER</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="data:,">
   <link rel="stylesheet" type="text/css" href="./style.css">
@@ -18,7 +18,7 @@
 </head>
 <body>
   <div class="topnav">
-    <h1><i class="far fa-compass"></i>&nbsp;&nbsp;CONTROLLER TEST&nbsp;&nbsp;<i class="far fa-compass"></i></h1>
+    <h1><i class="far fa-compass"></i>&nbsp;&nbsp;ACTION RECOGNITION CONTROLLER</h1>
   </div>
   <div class="content">
     <div class="cards">
@@ -41,16 +41,16 @@
         <p><span class="reading">X: <span id="accX"></span> ms<sup>2</sup></span></p>
         <p><span class="reading">Y: <span id="accY"></span> ms<sup>2</sup></span></p>
         <p><span class="reading">Z: <span id="accZ"></span> ms<sup>2</sup></span></p>
-		<button id="reset" onclick="resetAcceleration(this)">RESET ACCEL</button>
-		<p class="card-title">&nbsp;</p>
+		<button id="reset" onclick="resetAcceleration(this)">RESET ACCEL.</button>
+		<button id="reset" onclick="toggleAcceleration(this)">SHOW ACCEL.</button>
       </div>
       <div class="card">
         <p class="card-title">TEMPERATURE</p>
         <p><span class="reading"><span id="temp"></span> &deg;C</span></p>
-        <p class="card-title">&nbsp;</p>
         <p class="card-title">DEVICE</p>
         <p><span class="reading"><span id="deviceId">&nbsp;</span></span></p>
-		<p class="card-title">&nbsp;</p>
+        <p class="card-title">Button</p>
+        <p><span class="reading"><span id="btn">&nbsp;</span></span></p>
       </div>
     </div>
     <div class="cube-content">

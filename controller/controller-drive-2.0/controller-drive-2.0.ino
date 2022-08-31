@@ -4,6 +4,18 @@
 
 //TOOLS->Board->ESP8266 Boards (3.0.2)->LOLIN (WeMos) D1 mini Lite
 
+/****************************************************************************************************************************************************
+ * SETUP ENVIROMENT FOR "ESP8266 WeMOS D1 mini" chip:
+ * link:
+ * 
+ * 1) Additional Board Manager URLs: https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
+ * OR: https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json, http://arduino.esp8266.com/stable/package_esp8266com_index.json
+ * 2) Tools > Board > Boards Manager -> install "ESP8266 Microgear" library
+ * 3) TOOLS->Board->ESP8266 Boards (3.0.2)->LOLIN (WeMos) D1 mini Lite
+ * 4) Tools > Port and select the COM port 
+ ****************************************************************************************************************************************************/
+
+ 
 #include <ESP8266WiFi.h>
 #include "I2Cdev.h"
 //#include "MPU6050_6Axis_MotionApps20.h"

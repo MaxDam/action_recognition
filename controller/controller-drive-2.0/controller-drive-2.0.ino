@@ -508,13 +508,16 @@ void loop() {
   readings["gY"] = roll;
   readings["gZ"] = yaw;
 
-  readings["aX"] = aaReal.x;
-  readings["aY"] = aaReal.y;
-  readings["aZ"] = aaReal.z;
+  readings["aX"] = -aaReal.x / 1000;
+  readings["aY"] =  aaReal.y / 1000;
+  readings["aZ"] =  aaReal.z / 1000;
+  //readings["aX"] =  aaWorld.x;
+  //readings["aY"] =  aaWorld.y;
+  //readings["aZ"] =  aaWorld.z;
   
   readings["tp"] = 0;
   
-  readings["bt"] = (buttonState==LOW?1:0);
+  readings["bt"] = (buttonState==LOW ? 1 : 0);
 
   //prepara il messaggio
   String telemetry = "";

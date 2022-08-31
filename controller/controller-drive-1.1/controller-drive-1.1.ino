@@ -243,9 +243,9 @@ void loop() {
   //readings["gY"] = mpu.getGyroY();
   //readings["gZ"] = mpu.getGyroZ();
   
-  readings["aX"] = mpu.getAccX();
+  readings["aX"] =  mpu.getAccX();
   readings["aY"] = -mpu.getAccY();
-  readings["aZ"] = mpu.getAccZ();
+  readings["aZ"] =  mpu.getAccZ();
   
   readings["tp"] = mpu.getTemp();
  
